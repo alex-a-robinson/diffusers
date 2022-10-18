@@ -370,6 +370,19 @@ class StableDiffusionInpaintPipeline(DiffusionPipeline):
         # scale the initial noise by the standard deviation required by the scheduler
         latents = latents * self.scheduler.init_noise_sigma
 
+        # ******* https://github.com/huggingface/diffusers/pull/469/files
+        # adding noise to the masked areas depending on strength
+        rand_latents = torch.randn(
+            init_latents.shape,
+            generator=generator,
+            device=self.device,
+        )
+        init_latents_noised = init_latents * mask + rand_latents * (1 - mask)
+        init_latents = init_latents * (1 - strength) + init_latents_noised * strength
+        # ******
+
+        # multiply by scale_factor
+
         # prepare extra kwargs for the scheduler step, since not all schedulers have the same signature
         # eta (η) is only used with the DDIMScheduler, it will be ignored for other schedulers.
         # eta corresponds to η in DDIM paper: https://arxiv.org/abs/2010.02502
