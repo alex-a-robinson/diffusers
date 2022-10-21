@@ -372,13 +372,13 @@ class StableDiffusionInpaintPipeline(DiffusionPipeline):
 
         # ******* https://github.com/huggingface/diffusers/pull/469/files
         # adding noise to the masked areas depending on strength
-        rand_latents = torch.randn(
-            init_latents.shape,
-            generator=generator,
-            device=self.device,
-        )
-        init_latents_noised = init_latents * mask + rand_latents * (1 - mask)
-        init_latents = init_latents * (1 - strength) + init_latents_noised * strength
+        # rand_latents = torch.randn(
+        #     init_latents.shape,
+        #     generator=generator,
+        #     device=self.device,
+        # )
+        # init_latents_noised = init_latents * mask + rand_latents * (1 - mask)
+        # init_latents = init_latents * (1 - strength) + init_latents_noised * strength
         # ******
 
         # multiply by scale_factor
